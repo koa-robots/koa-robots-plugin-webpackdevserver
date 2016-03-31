@@ -1,6 +1,6 @@
 {
   "name": "koa-robots-plugin-webpackdevserver",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "koa-robots-plugin-webpackdevserver",
   "author": "寒飞紫",
   "license": "MIT",
@@ -9,8 +9,11 @@
   },
   "main": "./dist/index",
   "dependencies": {
+    "koa-compose": "^2.4.0",
+    "koa-webpack-dev-middleware": "^1.2.0",
+    "koa-webpack-hot-middleware": "^1.0.3",
     "webpack": "^1.12.14",
-    "webpack-dev-server": "^1.14.1"
+    "webpack-hot-middleware": "^2.10.0"
   },
   "devDependencies": {
     "babel-cli": "^6.5.1",
@@ -22,7 +25,6 @@
     "co-fs": "^1.2.0",
     "koa": "^1.1.2",
     "mocha": "^2.4.5",
-    "should": "^8.1.1",
     "supertest": "1.1.0"
   },
   "babel": {
@@ -36,7 +38,7 @@
   "scripts": {
     "compile": "node_modules/.bin/babel src -d dist",
     "prepublish": "npm run compile",
-    "test": "npm run compile && node_modules/.bin/mocha --reporter spec --require should --compilers js:babel-core/register"
+    "test": "npm run compile && node_modules/.bin/mocha --reporter spec --compilers js:babel-core/register"
   },
   "repository": {
     "type": "git",

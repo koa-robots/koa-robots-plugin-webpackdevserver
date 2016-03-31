@@ -1,16 +1,16 @@
 var path = require('path')
 
 module.exports = {
-    compiler : {
-        entry : path.resolve(__dirname, 'test', 'bundle.js'),
-        output : {
-            path : path.resolve(__dirname, 'test'),
-            filename : 'dist.js'
-        }
+    entry: [
+        path.resolve(__dirname, 'test', 'build/main.js')
+    ],
+    output : {
+        path : path.resolve(__dirname, 'build'),
+        filename : 'bundle.js'
     },
-    options : {
-        port: 8088,
+    devServer: {
+        quiet: true,
         noInfo : true,
-        publicPath : '/'
+        publicPath : '/build/'
     }
 }

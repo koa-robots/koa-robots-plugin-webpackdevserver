@@ -5,37 +5,37 @@ Object.defineProperty(exports, "__esModule", {
 });
 
 exports.default = function () {
-    let server, scripts, port, config;
+    let compiler, config;
 
-    port = getPort();
     config = require((0, _path.normalize)((0, _path.resolve)('./webpack.config.js')));
-    server = new _webpackDevServer2.default((0, _webpack2.default)(config.compiler), config.options);
 
-    scripts = ['<script type="text/javascript">', 'document.write("<script async src=\'http://HOST:' + port + '/webpack-dev-server.js\'><\\/script>".replace("HOST", location.hostname));', '</script>', '</body>'].join('');
+    config.devServer.hot = true;
+    config.plugins = config.plugins || [];
+    config.entry.unshift('webpack-hot-middleware/client');
+    config.plugins.unshift(new _webpack2.default.HotModuleReplacementPlugin());
+    config.plugins.unshift(new _webpack2.default.NoErrorsPlugin());
 
-    server.listen(port);
+    compiler = (0, _webpack2.default)(config);
 
-    return function* (next) {
-        yield next;
-
-        if (~this.type.indexOf('html') && this.body) {
-            this.body = ('' + this.body).replace('</body>', scripts);
-        }
-    };
+    return (0, _koaCompose2.default)([(0, _koaWebpackDevMiddleware2.default)(compiler, config.devServer), (0, _koaWebpackHotMiddleware2.default)(compiler)]);
 };
 
 var _webpack = require('webpack');
 
 var _webpack2 = _interopRequireDefault(_webpack);
 
+var _koaCompose = require('koa-compose');
+
+var _koaCompose2 = _interopRequireDefault(_koaCompose);
+
 var _path = require('path');
 
-var _webpackDevServer = require('webpack-dev-server');
+var _koaWebpackDevMiddleware = require('koa-webpack-dev-middleware');
 
-var _webpackDevServer2 = _interopRequireDefault(_webpackDevServer);
+var _koaWebpackDevMiddleware2 = _interopRequireDefault(_koaWebpackDevMiddleware);
+
+var _koaWebpackHotMiddleware = require('koa-webpack-hot-middleware');
+
+var _koaWebpackHotMiddleware2 = _interopRequireDefault(_koaWebpackHotMiddleware);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function getPort() {
-    return 2000 + Math.floor(Math.random() * 58000);
-}

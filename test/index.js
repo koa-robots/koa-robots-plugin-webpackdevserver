@@ -1,43 +1,42 @@
+import fs from 'fs'
 import koa from 'koa'
-import fs from 'co-fs'
-import {join} from 'path'
+import path from 'path'
+import webpackDev from '../dist'
 import request from 'supertest'
-import webpackDevServer from '../dist'
 
-describe('webpackDevServer', () => {
-    it('text/html', (done) => {
+describe('webpackDev', () => {
+    it('webpackDev', (done) => {
         var app = koa()
 
-        app.use(webpackDevServer())
-        app.use(function *(next){
-            this.type = 'html'
-            this.body = yield fs.createReadStream(join(process.cwd(), './test/views/index.html'))
-        })
+        app.use(webpackDev())
 
-        setTimeout(function(){
-            request(app.listen())
-                .get('/')
-                .expect(function(res){
-                    res.text.should.containEql('webpack-dev-server.js')
+        var agent = request(app.listen())
+
+        new Promise(function(resolve, reject){
+            agent.get('/build/bundle.js')
+                .expect(/[hello]{5}/, (err) => {
+                    if(err) throw err
+                    resolve()
                 })
-                .end(done)
-        }, 100)
-    })
+        }).then(function(){
+            new Promise(function(resolve, reject){
+                fs.writeFile(path.resolve(__dirname, 'build/main.js'), "document.write('hello wrold')", function(err){
+                    if(err){
+                        reject(err)
+                        return
+                    }
 
-    it('text/plain', (done) => {
-        var app = koa()
-
-        app.use(webpackDevServer())
-        app.use(function *(next){
-            this.type = 'text'
-            this.body = yield fs.createReadStream(join(process.cwd(), './test/views/index.html'))
-        })
-
-        request(app.listen())
-            .get('/')
-            .expect(function(res){
-                res.text.should.not.containEql('webpack-dev-server.js')
+                    resolve()
+                })
+            }).then(function(){
+                setTimeout(function(){
+                    agent.get('/build/bundle.js')
+                        .expect(/[hello wrold]{11}/, (err) => {
+                            if(err) throw err
+                            done()
+                        })
+                }, 500)
             })
-            .end(done)
+        })
     })
 })
