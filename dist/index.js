@@ -8,9 +8,11 @@ exports.default = function () {
     let compiler, config;
 
     config = require((0, _path.normalize)((0, _path.resolve)('./webpack.config.js')));
+    config.plugins = config.plugins || [];
+    config.devServer = config.devServer || {};
 
     config.devServer.hot = true;
-    config.plugins = config.plugins || [];
+    config.devServer.publicPath = config.output.publicPath;
     config.entry.unshift('webpack-hot-middleware/client');
     config.plugins.unshift(new _webpack2.default.HotModuleReplacementPlugin());
     config.plugins.unshift(new _webpack2.default.NoErrorsPlugin());

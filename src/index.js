@@ -8,9 +8,11 @@ export default function() {
     let compiler, config
 
     config = require(normalize(resolve('./webpack.config.js')))
+    config.plugins = config.plugins || []
+    config.devServer = config.devServer || {}
 
     config.devServer.hot = true
-    config.plugins = config.plugins || []
+    config.devServer.publicPath = config.output.publicPath
     config.entry.unshift('webpack-hot-middleware/client')
     config.plugins.unshift(new webpack.HotModuleReplacementPlugin())
     config.plugins.unshift(new webpack.NoErrorsPlugin())

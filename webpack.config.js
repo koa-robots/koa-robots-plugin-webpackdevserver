@@ -6,11 +6,11 @@ module.exports = {
     ],
     output : {
         path : path.resolve(__dirname, 'build'),
+        publicPath : '/build/',
         filename : 'bundle.js'
     },
     devServer: {
         quiet: true,
-        noInfo : true,
-        publicPath : '/build/'
+        noInfo : true
     }
 }
