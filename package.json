@@ -1,6 +1,6 @@
 {
   "name": "koa-robots-plugin-webpackdevserver",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "koa-robots-plugin-webpackdevserver",
   "author": "寒飞紫",
   "license": "MIT",
@@ -12,8 +12,7 @@
     "koa-compose": "^2.4.0",
     "koa-webpack-dev-middleware": "^1.2.0",
     "koa-webpack-hot-middleware": "^1.0.3",
-    "webpack": "^1.12.14",
-    "webpack-hot-middleware": "^2.10.0"
+    "webpack": "^1.12.14"
   },
   "devDependencies": {
     "babel-cli": "^6.5.1",
